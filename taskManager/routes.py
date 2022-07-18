@@ -1,7 +1,9 @@
+import requests
 from flask import Blueprint, render_template, request, url_for, redirect, flash, session, jsonify
 from taskManager.models import Users, Customers, Employees, Tasks, WorkReports, Hypervisor
 from wtforms import ValidationError
 import re
+from taskManager.models import customers_schema
 import json
 from datetime import datetime
 from flask_login import login_user, login_required, logout_user, current_user
@@ -273,3 +275,12 @@ def editcust():
 
         # return render_template('edit/editcustomer.html', customer=customer, form=form , form2=form2)
     return render_template('Edit/EditClients.html', form=form, myform=myform, customer=customer)
+
+@main.route('/customerapiget', methods=['GET'])
+def api_queryget():
+    all_customers = Customers.query.all()
+    result = customers_schema.dumps(all_customers)
+    return jsonify(result)
+
+
+
